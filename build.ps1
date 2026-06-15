@@ -1,7 +1,9 @@
 $ErrorActionPreference = "Stop"
 
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
-$source = Join-Path $root "WindowsMcpPanel\Program.cs"
+$sources = Get-ChildItem -Path (Join-Path $root "WindowsMcpPanel") -Recurse -Filter "*.cs" |
+    Sort-Object FullName |
+    ForEach-Object { $_.FullName }
 $icon = Join-Path $root "WindowsMcpPanel\icon.ico"
 $dist = Join-Path $root "dist"
 $output = Join-Path $dist "McpPanelWindows.exe"
@@ -30,6 +32,10 @@ New-Item -ItemType Directory -Path $dist -Force | Out-Null
     /r:System.Drawing.dll `
     /r:System.Windows.Forms.dll `
     /r:System.Web.Extensions.dll `
-    $source
+    $sources
+
+if ($LASTEXITCODE -ne 0) {
+    exit $LASTEXITCODE
+}
 
 Write-Host "Built $output"
