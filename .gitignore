@@ -1,0 +1,10 @@
+bin/
+obj/
+dist/
+*.exe
+*.pdb
+*.user
+*.suo
+.vs/
+*.tmp
+*.log
